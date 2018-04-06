@@ -1,5 +1,35 @@
 # Project Tracker
 
+This project based on Project Management Systems
+
+# Project Install
+
+```
+git clone https://github.com/dhanabal6/projectTracker.git
+
+cd <projectTracker>
+
+npm install
+
+```
+
+# Project Run
+
+```
+npm run startDev
+
+npm run server
+
+```
+
+- npm run startDev -> run client side React-Redux code
+- npm run server -> run server side nodeJs code
+- Both are run different ports (http://localhost:3000,http://localhost:3001)
+- Authentication Logic using passportJs middleware for NodeJs
+- In this project-tracker project using material-ui styles and icons
+- Fornt End Development using ReactJs-Redux
+
+# Project Document 
 
 ## Tasks
 
