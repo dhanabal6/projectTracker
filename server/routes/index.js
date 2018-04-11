@@ -447,29 +447,50 @@ router.get("/api/projectData", isLoggedIn, async (req, res) => {
   );
 });
 
-router.post("/api/timesheet/:timesheetId", isLoggedIn, async (req, res) => {
+router.post("/api/timesheet/:timesheetIndex/:timesheetId", isLoggedIn, async (req, res) => {
   const dataTimesheet = req.body.timesheet;
   let date;
   Object.keys(dataTimesheet).map((val, index) => {
     date = val;
   });
-  const data = dataTimesheet[date];
-  const taskCompletion = req.params.timesheetId;
-  await Timesheet.updateOne(
-    { _id: req.user._id, [`timesheet.${date}.taskCompletion`]: taskCompletion },
-    { $set: { [`timesheet.$.${date}`]: data } },
-    (err, data) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(data);
-      }
-    }
-  );
+  let data;
+  dataTimesheet[date].map(value => {
+    data = value;
+  });
+  const randomStr = Math.random().toString(36).slice(-8);
+  const timesheetIndex = req.params.timesheetIndex;
+  const timesheetId = req.params.timesheetId;
+  await Timesheet.update(
+        {
+          _id: req.user._id,
+          [`timesheet.${date}.timesheetId`]: timesheetId
+        },
+        {
+          $set: {
+            [`timesheet.$.${date}.${timesheetIndex}.timesheetId`]: randomStr,
+            [`timesheet.$.${date}.${timesheetIndex}.projectName`]: data.projectName,
+            [`timesheet.$.${date}.${timesheetIndex}.taskName`]: data.taskName,
+            [`timesheet.$.${date}.${timesheetIndex}.spendTime`]: data.spendTime,
+            [`timesheet.$.${date}.${timesheetIndex}.taskCompletion`]: data.taskCompletion
+          }
+        },
+        (err, data) => {
+          if (err) {
+            res.send(err);
+          } else {
+            console.log('timesheet updated');
+            res.send(data);
+          }
+        }
+      );
+
 });
 
-router.get("/api/reports", (req, res) => {
-  res.send(reportData);
+
+router.get("/api/reports", isLoggedIn, async (req, res) => {
+  const allProjects = await Project.getReports(req.user._id);
+  res.send(allProjects);
+  // res.send(reportData);
 });
 
 router.get("/api/:projectId", (req, res) => {
@@ -483,8 +504,14 @@ router.get("/api/:projectId", (req, res) => {
 });
 
 router.post("/api/:projectId", isLoggedIn, (req, res) => {
-  req.body.projectId = req.params.projectId;
-  const task = new Task(req.body);
+  const task = new Task({
+    projectId: req.params.projectId,
+    name: req.body.name,
+    description: req.body.description,
+    points: req.body.points,
+    status: req.body.status,
+    assignedTo: req.body.assignedTo
+  });
   const err = task.joiValidate(req.body);
   if (err) throw err;
   task.save((error, data) => {
@@ -494,6 +521,58 @@ router.post("/api/:projectId", isLoggedIn, (req, res) => {
       res.send({ taskData: data });
     }
   });
+});
+
+router.post("/api/task/:taskName", isLoggedIn, (req, res) => {
+  const taskname = req.params.taskName;
+  const spendtime = req.body.spendTime;
+  const taskcompletion = req.body.taskCompletion;
+  const date = req.body.date;
+  if (req.body.formId == "new") {
+    console.log("update push");
+    Task.update(
+      { name: taskname },
+      {
+        $push: {
+          timeLog: {
+            userId: req.user._id,
+            spendTime: spendtime,
+            taskCompletion: taskcompletion,
+            date: date
+          }
+        }
+      },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          console.log(data);
+          // res.send(data);
+        }
+      }
+    );
+  } else {
+    console.log("update set");
+    console.log(date);
+    Task.update(
+      { name: taskname, "timeLog.date": date },
+      {
+        $set: {
+          "timeLog.$.spendTime": spendtime,
+          "timeLog.$.taskCompletion": taskcompletion,
+          "timeLog.$.date": date
+        }
+      },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          console.log(data);
+          // res.send(data);
+        }
+      }
+    );
+  }
 });
 
 router.post("/api/:projectId/:taskId", isLoggedIn, (req, res) => {
@@ -513,5 +592,6 @@ router.post("/api/:projectId/:taskId", isLoggedIn, (req, res) => {
     }
   );
 });
+
 
 module.exports = router;

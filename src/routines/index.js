@@ -8,6 +8,7 @@ export const fetchProjectData = createRoutine('FETCH_PROJECT_DATA');
 export const fetchTasks = createRoutine('FETCH_TASKS');
 export const addTask = createRoutine('ADD_TASK');
 export const editTask = createRoutine('EDIT_TASK');
+export const updateTimelog = createRoutine('UPDATE_TIMELOG');
 
 export const fetchPeople = createRoutine('FETCH_PEOPLE');
 export const addPeople = createRoutine('ADD_PEOPLE');

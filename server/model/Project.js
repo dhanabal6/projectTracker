@@ -31,25 +31,52 @@ projectSchema.statics.getProjects = function(userId){
       }
     },
     {
-      $lookup: {
-        from: 'timesheets',
-        localField: 'userId',
-        foreignField: 'userId',
-        as: 'timesheet'
-      }
-    },
-    {
       $project: {
         name: '$$ROOT.name',
         description:'$$ROOT.description',
         userList: '$$ROOT.userList',
         tasks: '$data',
-        timesheets: '$timesheet'
       }
     }
   ]);
 };
 
+projectSchema.statics.getReports = function(userId){
+  return this.aggregate([
+    { $match: {
+            userId: userId
+        }},
+    {
+      $lookup: {
+        from: 'tasks',
+        localField: '_id',
+        foreignField: 'projectId',
+        as: 'tasks'
+      }
+    },
+    // {$unwind: '$tasks'},
+    // {$group :{
+    //  "_id":'$_id',
+    //  "pointsCount": {$sum: '$tasks.points'}
+    // }},
+
+    // {$unwind: '$tasks'},
+    //     {$group: {"_id": "$tasks", "taskCount": {$sum: '$tasks.points'}}},
+    // {$group: {"_id":null,"tasks_details":{$push:{"taskName":'$_id',
+    //    "taskCount":"$taskCount"}} }},
+
+    {
+      $project: {
+        'name': '$$ROOT.name',
+        'taskCount': {$size: "$tasks"},
+        // 'pointsCount': {}
+         tasks: '$tasks',
+        // }
+        // sampleTask: '$tasks'
+      }
+    }
+  ]);
+};
 projectSchema.statics.getTimesheet = function(userId){
   return this.aggregate([
     { $match: {

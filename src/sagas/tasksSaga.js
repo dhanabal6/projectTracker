@@ -1,4 +1,4 @@
-import { fetchTasks, addTask, editTask } from '../routines';
+import { fetchTasks, addTask, editTask, updateTimelog } from '../routines';
 import { takeEvery, delay } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
 import api from '../api';
@@ -44,9 +44,22 @@ function* editTaskSaga(data) {
   }
 }
 
+function* updateTimelogSaga(data) {
+  try {
+    yield put(updateTimelog.request());
+    console.dir(data);
+    const response = yield call(api.updateTimelog.bind(null, data.payload.taskname, data.payload.logData));
+    yield put(updateTimelog.success(response));
+  } catch (error) {
+    yield put(updateTimelog.failure(error.message));
+  } finally {
+    yield put(updateTimelog.fulfill());
+  }
+}
 
 export default [
   fork(takeEvery,fetchTasks.TRIGGER, fetchTasksSaga),
   fork(takeEvery,addTask.TRIGGER, addTaskSaga),
   fork(takeEvery,editTask.TRIGGER, editTaskSaga),
+  fork(takeEvery,updateTimelog.TRIGGER, updateTimelogSaga),
 ]

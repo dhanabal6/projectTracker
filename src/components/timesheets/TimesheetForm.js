@@ -10,7 +10,8 @@ import {
   addTimesheet,
   editTimesheet,
   fetchTasks,
-  fetchProjectData
+  fetchProjectData,
+  updateTimelog,
 } from "../../routines";
 
 class TimesheetForm extends Component {
@@ -25,7 +26,9 @@ class TimesheetForm extends Component {
 
   addTimesheetForm = values => {
     console.dir(values);
+    const randomStr = Math.random().toString(36).slice(-8);
     const data = {
+      timesheetId: randomStr,
       projectName: values.projectName,
       taskName: values.taskName,
       spendTime: values.spendTime,
@@ -45,11 +48,25 @@ class TimesheetForm extends Component {
     };
     console.log(data);
     const id = this.props.match.params.timesheetId;
+    const pathName = this.props.location.pathname;
+    let timesheetId = pathName.substr(pathName.lastIndexOf('/') + 1);
     if (id === "new") {
       this.props.addTimesheet(data);
     } else {
-      this.props.editTimesheet({ id, data });
+      this.props.editTimesheet({ id, timesheetId, data });
     }
+    let logValue;
+    this.state.timesheet.map(value => {
+      logValue = value;
+    });
+    const taskname = logValue.taskName;
+    const logData = {
+      formId: id,
+      spendTime: logValue.spendTime,
+      taskCompletion: logValue.taskCompletion,
+      date: currentDate
+    };
+    this.props.updateTimelog({taskname, logData});
   };
 
   handleSelectChange = (selectedItem, data) => {
@@ -202,8 +219,8 @@ export default withRouter(
           isUpdating: state.timesheets.updating,
           isPopup: state.timesheets.popup,
           initialValues: datas.find(
-            (timesheets, i) =>
-              timesheets.taskCompletion === props.match.params.timesheetId
+            (timesheets, index) => 
+               index.toString() === props.match.params.timesheetId
           )
         };
       } else {
@@ -219,6 +236,6 @@ export default withRouter(
         };
       }
     },
-    { addTimesheet, editTimesheet, fetchTasks, fetchProjectData }
+    { addTimesheet, editTimesheet, fetchTasks, fetchProjectData, updateTimelog }
   )(TimesheetForm)
 );

@@ -29,11 +29,13 @@ class ProjectTable extends Component {
             {this.props.projectData.map(item => {
                 let task = item.tasks;
                 let totalPoints=0;
+                let completedPoints=0;
                  task.forEach(each => {
                      totalPoints+=each.points;
-              });
-                let timesheet = item.timesheets;
-                let completedPoints=0;
+                     each.timeLog.forEach( value => {
+                      completedPoints+=value.taskCompletion
+                     })
+              });  
               return(
                 <TableRow>
                 <TableRowColumn>{item.name}</TableRowColumn>

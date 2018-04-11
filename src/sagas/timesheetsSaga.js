@@ -14,7 +14,7 @@ function* fetchTimesheetsSaga(data) {
     const response = yield call(
       api.fetchTimesheets.bind(null, data.payload)
     );
-    yield call(delay, 2000);
+    yield call(delay, 200);
     yield put(fetchTimesheets.success(response));
   } catch (error) {
     yield put(fetchTimesheets.failure(error.message));
@@ -40,11 +40,13 @@ function* addTimesheetSaga(data) {
 function* editTimesheetSaga(data) {
   try {
     yield put(editTimesheet.request());
+        console.dir(data);
+
     const response = yield call(
-      api.editTimesheet.bind(null, data.payload.id, data.payload.data)
+      api.editTimesheet.bind(null, data.payload.id,data.payload.timesheetId, data.payload.data)
     );
     yield put(editTimesheet.success(response));
-     yield put(fetchTimesheets.trigger());
+    yield put(fetchTimesheets.trigger());
   } catch (error) {
     yield put(editTimesheet.failure(error.message));
   } finally {

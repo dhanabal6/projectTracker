@@ -26,13 +26,14 @@ class TimesheetTable extends Component {
   };
 
   render() {
+    console.log(this.props.timesheetsData);
     return (
       <div>
         {}
         <div>
-          {this.props.timesheetsData.map(item =>
-            this.filter_array(item.timesheet).map(data => {
-              let completedPoints = 0;
+         {this.props.timesheetsData.map(item => 
+          this.filter_array(item.timesheet).map(data => {
+            let completedPoints = 0;
               return (
                 <div>
                   <Table>
@@ -42,10 +43,11 @@ class TimesheetTable extends Component {
                         )
                       }
                       {Object.keys(data).map((val,index) => 
-                        data[val].map((value,i) => {
-                          console.log(i);
-                          completedPoints += value.spendTime;
-                        return (
+                        data[val].map((value,index) => {
+                          console.log(value);
+                          completedPoints+=value.spendTime;
+                          console.log(completedPoints);
+                      return (
                           <TableRow>
                             <TableRowColumn>{value.projectName}</TableRowColumn>
                             <TableRowColumn>{value.taskName}</TableRowColumn>
@@ -55,7 +57,7 @@ class TimesheetTable extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               <Link
-                                to={"/timesheet/" + value.taskCompletion}
+                                to={"/timesheet/" + index + "/" + value.timesheetId }
                                 onClick={() => this.props.handleOpen()}
                               >
                                 <Create color={"#262626"} />
@@ -64,16 +66,13 @@ class TimesheetTable extends Component {
                           </TableRow>
                         );
                         })
-                      )}
-                    </TableBody>
-                  </Table>
-                  <div>
-                    Total Time to Spend:<b>{completedPoints}</b>
-                  </div>
-                </div>
-              );
-            })
-          )}
+                       )}   
+                      </TableBody>
+                      </Table>
+                      </div>
+                      )
+          })
+         )}
         </div>
       </div>
     );

@@ -7,8 +7,8 @@ const timesheetSchema = new Schema(
     _id: Schema.Types.ObjectId,
     timesheet: [Schema.Types.Mixed]
   },
-  { _id: false }
-);
+  { _id:false }
+  );
 
 // timesheetSchema.statics.getTimesheets = function(userId, date) {
 //   console.log(userId);

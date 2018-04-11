@@ -39,6 +39,9 @@ const addTask = (projectId, data) =>
 const editTask = (projectId, taskId, data) =>
   axios.post(`/api/${projectId}/${taskId}`, data).then(res => res.data);
 
+const updateTimelog = (taskname, data) =>
+  axios.post(`/api/task/${taskname}`, data).then(res => res.data);
+
 const fetchPeople = () => 
   axios.get(`/api/people`).then(res => res.data);
 
@@ -57,8 +60,8 @@ const fetchTimesheets = date =>
 const addTimesheet = data =>
   axios.post(`/api/timesheet`, data.payload).then(res => res.data);
 
-const editTimesheet = (timesheetId, data) =>
-  axios.post(`/api/timesheet/${timesheetId}`, data).then(res => res.data);
+const editTimesheet = (timesheetIndex, timesheetId, data) =>
+  axios.post(`/api/timesheet/${timesheetIndex}/${timesheetId}`, data).then(res => res.data);
 
 const fetchReports = () => 
   axios.get(`/api/reports`).then(res => res.data);
@@ -70,6 +73,7 @@ export default {
   fetchTasks,
   addTask,
   editTask,
+  updateTimelog,
   fetchPeople,
   addPeople,
   editPeople,

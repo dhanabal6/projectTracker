@@ -1,4 +1,4 @@
-import { fetchTasks, addTask, editTask } from '../routines';
+import { fetchTasks, addTask, editTask, updateTimelog } from '../routines';
  
 const initialState = {
   data: [],
@@ -31,6 +31,28 @@ export default function tasksReducer(state = initialState, action) {
         ...state,
         loading: false,
       };
+
+    case updateTimelog.TRIGGER:
+      return {
+        ...state,
+        loading: true,
+      };
+    case updateTimelog.SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+      };
+    case updateTimelog.FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case updateTimelog.FULFILL:
+      return {
+        ...state,
+        loading: false,
+      };
+
     case addTask.TRIGGER:
     case editTask.TRIGGER:
       return {

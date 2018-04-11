@@ -11,6 +11,7 @@ import {
 
 class ReportTable extends Component {
   render() {
+    console.log(this.props.reportData);
     return (
       <Table>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -24,16 +25,24 @@ class ReportTable extends Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {this.props.reportData.map(reportData => (
-            <TableRow>
-              <TableRowColumn>{reportData.projectName}</TableRowColumn>
-              <TableRowColumn>{reportData.taskCount}</TableRowColumn>
-              <TableRowColumn>{reportData.completeTaskCount}</TableRowColumn>
-              <TableRowColumn>{reportData.pointsCount}</TableRowColumn>
-              <TableRowColumn>{reportData.completePointsCount}</TableRowColumn>
-              <TableRowColumn>{reportData.status}</TableRowColumn>
-            </TableRow>
-          ))}
+          {this.props.reportData.map(item => {
+            let pointsCount = 0;
+            let completedPoints = 0;
+            item.tasks.forEach( data => {
+              pointsCount+=data.points;
+              data.timeLog.forEach( value => {
+                      completedPoints+=value.taskCompletion
+                     })
+            })
+             console.log(pointsCount);
+             console.log(completedPoints);
+          return(<TableRow>
+              <TableRowColumn>{item.name}</TableRowColumn>
+              <TableRowColumn>{item.taskCount}</TableRowColumn>
+              <TableRowColumn>{pointsCount}</TableRowColumn>
+              <TableRowColumn>{completedPoints}</TableRowColumn>
+            </TableRow>);
+          })}
         </TableBody>
       </Table>
     );

@@ -2,6 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Joi = require('joi');
 
+const timeLogSchema = new Schema({
+     userId:{
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    },
+    spendTime: Number,
+    taskCompletion: Number,
+    date: String,
+    },{ _id : false }
+);
+
 const taskSchema = new Schema(
   {
     projectId: {
@@ -13,21 +24,7 @@ const taskSchema = new Schema(
     points: Number,
     status: String,
     assignedTo: String,
-    timeLog: [{
-     userId:{
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    },
-    spendTime: {
-      type: Number,
-      ref: 'Timesheet'
-    },
-    date: {
-     type: String,
-     ref: 'Timesheet'
-    }
-    }
-    ]
+    timeLog: [timeLogSchema]
   },
   { timestamps: true },
   {

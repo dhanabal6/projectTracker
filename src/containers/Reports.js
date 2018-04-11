@@ -11,6 +11,13 @@ class Reports extends Component {
     this.props.fetchReports();
   }
   render() {
+    if (this.props.reports.loading) {
+      return <div className="Loading bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>;
+    }
     const { data } = this.props.reports;
     return (
       <div className="page">
