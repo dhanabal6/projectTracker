@@ -28,19 +28,43 @@ class ReportTable extends Component {
           {this.props.reportData.map(item => {
             let pointsCount = 0;
             let completedPoints = 0;
+            let points = 0;
+            let comPoints = 0;
             item.tasks.forEach( data => {
+              points = data.points;
               pointsCount+=data.points;
               data.timeLog.forEach( value => {
-                      completedPoints+=value.taskCompletion
+                      // comPoints =  value.taskCompletion;
+                      completedPoints+=value.taskCompletion;
                      })
-            })
-             console.log(pointsCount);
-             console.log(completedPoints);
+            });
+            console.log(points);
+            // console.log(comPoints);
+
+             const status = (completedPoints/pointsCount)*100;
+             let statusValue = 0;
+             if(isNaN(status)){
+                statusValue = 0;
+             } else {
+                statusValue = Math.round(status);
+             }
+             let styel = {
+              width: statusValue
+             };
+
           return(<TableRow>
               <TableRowColumn>{item.name}</TableRowColumn>
               <TableRowColumn>{item.taskCount}</TableRowColumn>
               <TableRowColumn>{pointsCount}</TableRowColumn>
               <TableRowColumn>{completedPoints}</TableRowColumn>
+              <TableRowColumn>
+              <div className="progress">
+                <div className="progress-bar" role="progressbar" aria-valuenow={statusValue}
+                aria-valuemin="0" aria-valuemax="100" style={styel}>
+                  {statusValue}%
+                </div>
+                </div>
+            </TableRowColumn>
             </TableRow>);
           })}
         </TableBody>

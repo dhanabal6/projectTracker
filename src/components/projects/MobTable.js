@@ -21,8 +21,18 @@ class MobTable extends Component {
   render() {
     const { index } = this.state;
     let currentItem = {};
+    let totalPoints=0;
+    let completedPoints=0;
+    console.log(this.props.mobProjectData);
     if (index !== -1) {
       currentItem = this.props.mobProjectData[index];
+      let task = currentItem.tasks;
+       task.forEach(each => {
+           totalPoints+=each.points;
+           each.timeLog.forEach( value => {
+            completedPoints+=value.taskCompletion
+           })
+         });
     }
     return (
       <div>
@@ -56,8 +66,8 @@ class MobTable extends Component {
             </ul>
             <ul>
               <li>{currentItem.name}</li>
-              <li>{currentItem.totalPoints}</li>
-              <li>{currentItem.completedPoints}</li>
+              <li>{totalPoints}</li>
+              <li>{completedPoints}</li>
               <li>
                 {" "}
                 <Link

@@ -72,6 +72,7 @@ class TaskForm extends Component {
               label="Tasks points"
             />
             <Field name="status" component={forms.Select} label="Tasks Status">
+              <option />
               <option>BackLog</option>
               <option>Active</option>
               <option>InProgress</option>

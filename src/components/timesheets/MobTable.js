@@ -17,22 +17,49 @@ class MobTable extends Component {
   handleClose = () => {
     this.setState({ index: -1 });
   };
+  
+  filter_array = test_array => {
+    var index = -1,
+      arr_length = test_array ? test_array.length : 0,
+      resIndex = -1,
+      result = [];
+    while (++index < arr_length) {
+      var value = test_array[index];
+      if (value) {
+        result[++resIndex] = value;
+      }
+    }
+    return result;
+  };
 
   render() {
     const { index } = this.state;
     let currentItem = {};
     if (index !== -1) {
       currentItem = this.props.mobTimetableData[index];
+      this.filter_array(currentItem.timesheet).map(data => (
+        Object.keys(data).map((val,index) => 
+            data[val].map((value,index) => {
+              currentItem =  value;
+            }
+  ))
+))
     }
+    console.log(currentItem);
     return (
       <div>
         <p className="name-mob">Project Name</p>
         <ul>
-          {this.props.mobTimetableData.map((items, i) => (
-            <li className="data-mob" onClick={() => this.handleOpen(i)}>
-              {items.projectName}
-            </li>
-          ))}
+          {this.props.mobTimetableData.map((item, i) => 
+            this.filter_array(item.timesheet).map(data => (
+                Object.keys(data).map((val,index) => 
+                        data[val].map((value,index) => (
+                  <li className="data-mob" onClick={() => this.handleOpen(i)}>
+                    {value.projectName}
+                  </li>
+              )
+              ))
+            )))}
         </ul>
         <Dialog
           title={
@@ -64,14 +91,11 @@ class MobTable extends Component {
               <li>{currentItem.taskCompletion}</li>
               <li>
                 <Link
-                  to={"/timesheet/" + currentItem._id}
+                  to={"/timesheet/" + index + "/" + currentItem.timesheetId}
                   onClick={() => this.props.handleOpen()}
                 >
                   Edit
                 </Link>
-              </li>
-              <li>
-                <Link to={"/" + currentItem._id}>Manage Task</Link>
               </li>
             </ul>
           </div>

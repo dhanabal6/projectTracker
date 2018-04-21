@@ -20,8 +20,35 @@ class MobTable extends Component {
   render() {
     const { index } = this.state;
     let currentItem = {};
+    let pointsCount = 0;
+    let completedPoints = 0;
+    let points = 0;
+    let comPoints = 0;
+    let statusValue = 0;
+    let style ={};
     if (index !== -1) {
       currentItem = this.props.mobReportData[index];
+      console.log(currentItem);
+      currentItem.tasks.forEach( data => {
+              points = data.points;
+              pointsCount+=data.points;
+              data.timeLog.forEach( value => {
+                      // comPoints =  value.taskCompletion;
+                      completedPoints+=value.taskCompletion;
+                     })
+            });
+            console.log(points);
+            // console.log(comPoints);
+
+             const status = (completedPoints/pointsCount)*100;
+             if(isNaN(status)){
+                statusValue = 0;
+             } else {
+                statusValue = Math.round(status);
+             }
+           style = {
+              width: statusValue
+             };
     }
     return (
       <div>
@@ -29,7 +56,7 @@ class MobTable extends Component {
         <ul>
           {this.props.mobReportData.map((items, i) => (
             <li className="data-mob" onClick={() => this.handleOpen(i)}>
-              {items.projectName}
+              {items.name}
             </li>
           ))}
         </ul>
@@ -55,12 +82,18 @@ class MobTable extends Component {
               <li>Project status in %:</li>
             </ul>
             <ul>
-              <li>{currentItem.projectName}</li>
+              <li>{currentItem.name}</li>
               <li>{currentItem.taskCount}</li>
-              <li>{currentItem.completeTaskCount}</li>
-              <li>{currentItem.pointsCount}</li>
-              <li>{currentItem.completePointsCount}</li>
-              <li>{currentItem.status}</li>
+              <li>{pointsCount}</li>
+              <li>{completedPoints}</li>
+              <li>
+                <div className="progress">
+                <div className="progress-bar" role="progressbar" aria-valuenow={statusValue}
+                aria-valuemin="0" aria-valuemax="100" style={style}>
+                  {statusValue}%
+                </div>
+                </div>
+              </li>
             </ul>
           </div>
         </Dialog>

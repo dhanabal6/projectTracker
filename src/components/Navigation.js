@@ -102,7 +102,7 @@ class Navigation extends Component {
               />
               <MenuItem
                 primaryText="Report"
-                containerElement={<Link to="/report" />}
+                containerElement={<Link to="/reports" />}
               />
             </IconMenu>
           </div>

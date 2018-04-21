@@ -186,10 +186,10 @@ class Timesheets extends Component {
                 })}
               </div>
             )}
-{/*            <div className="mobtable">
+            <div className="mobtable">
               <MobTable mobTimetableData={data} />
             </div>
-*/}          </div>
+          </div>
         </div>
       </div>
     );
