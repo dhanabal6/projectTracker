@@ -7,31 +7,8 @@ const timesheetSchema = new Schema(
     _id: Schema.Types.ObjectId,
     timesheet: [Schema.Types.Mixed]
   },
-  { _id:false }
-  );
-
-// timesheetSchema.statics.getTimesheets = function(userId, date) {
-//   console.log(userId);
-//   console.log(date);
-//   return this.aggregate([
-//     {
-//       $match: {
-//         _id: userId
-//       }
-//     },
-//     {
-//       $project: {
-//         timesheet: {
-//           $filter: {
-//             input: "$timesheet",
-//             as: "item",
-//             cond:{ eq: [`$$item.${date}`, true]}
-//           }
-//         }
-//       }
-//     }
-//   ]);
-// };
+  { _id: false }
+);
 
 timesheetSchema.methods.joiValidate = obj => {
   const schema = {

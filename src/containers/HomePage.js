@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Route, withRouter } from "react-router-dom";
 
-import LogIn from '../components/Login';
-import Register from '../components/Register';
-import ForgotPassword from '../components/ForgotPassword';
-import ResetPassword from '../components/ResetPassword';
+import LogIn from "../components/Login";
+import Register from "../components/Register";
+import ForgotPassword from "../components/ForgotPassword";
+import ResetPassword from "../components/ResetPassword";
 
 class HomePage extends Component {
   constructor(props) {
@@ -17,43 +17,48 @@ class HomePage extends Component {
     };
   }
 
-  changeForm = (name) => {
-     this.setState({currentView: name})
-  }
+  changeForm = name => {
+    this.setState({ currentView: name });
+  };
   render() {
     const { currentView } = this.state;
     return (
       <div className="homePage">
         <div className="homebtns">
-          <div onClick={() => {this.changeForm('login')}}>
+          <div
+            onClick={() => {
+              this.changeForm("login");
+            }}
+          >
             Login
           </div>
-          <div onClick={() => {this.changeForm('register')}}
+          <div
+            onClick={() => {
+              this.changeForm("register");
+            }}
           >
             Register
           </div>
-          <div onClick={() => {this.changeForm('forgotPassword')}}>
+          <div
+            onClick={() => {
+              this.changeForm("forgotPassword");
+            }}
+          >
             Forgot Password
           </div>
         </div>
-        {
-          (currentView === "login") && (
-            <LogIn onSubmit={this.loginFormSubmit} />
-          )
-        }
-        {
-          (currentView === "register") && (
-            <Register onSubmit={this.registerFormSubmit} />
-          )
-        }
-        {
-          (currentView === "forgotPassword") && (
-            <ForgotPassword onSubmit={this.forgotPasswordFormSubmit} />
-          )
-        }
+        {currentView === "login" && <LogIn onSubmit={this.loginFormSubmit} />}
+        {currentView === "register" && (
+          <Register onSubmit={this.registerFormSubmit} />
+        )}
+        {currentView === "forgotPassword" && (
+          <ForgotPassword onSubmit={this.forgotPasswordFormSubmit} />
+        )}
         <Route
           path="/resetPassword/:token"
-          render={() => <ResetPassword resetFormSubmit={this.resetPasswordFormSubmit} />}
+          render={() => (
+            <ResetPassword resetFormSubmit={this.resetPasswordFormSubmit} />
+          )}
         />
       </div>
     );

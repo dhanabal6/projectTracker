@@ -11,7 +11,7 @@ import {
   editTimesheet,
   fetchTasks,
   fetchProjectData,
-  updateTimelog,
+  updateTimelog
 } from "../../routines";
 
 class TimesheetForm extends Component {
@@ -26,7 +26,9 @@ class TimesheetForm extends Component {
 
   addTimesheetForm = values => {
     console.dir(values);
-    const randomStr = Math.random().toString(36).slice(-8);
+    const randomStr = Math.random()
+      .toString(36)
+      .slice(-8);
     const data = {
       timesheetId: randomStr,
       projectName: values.projectName,
@@ -49,7 +51,7 @@ class TimesheetForm extends Component {
     console.log(data);
     const id = this.props.match.params.timesheetId;
     const pathName = this.props.location.pathname;
-    let timesheetId = pathName.substr(pathName.lastIndexOf('/') + 1);
+    let timesheetId = pathName.substr(pathName.lastIndexOf("/") + 1);
     if (id === "new") {
       this.props.addTimesheet(data);
     } else {
@@ -66,7 +68,7 @@ class TimesheetForm extends Component {
       taskCompletion: logValue.taskCompletion,
       date: currentDate
     };
-    this.props.updateTimelog({taskname, logData});
+    this.props.updateTimelog({ taskname, logData });
   };
 
   handleSelectChange = (selectedItem, data) => {
@@ -212,19 +214,17 @@ export default withRouter(
         })
       );
       if (datas) {
-        console.log("1");
         return {
           tasks: state.tasks.data,
           projects: state.projects,
           isUpdating: state.timesheets.updating,
           isPopup: state.timesheets.popup,
           initialValues: datas.find(
-            (timesheets, index) => 
-               index.toString() === props.match.params.timesheetId
+            (timesheets, index) =>
+              index.toString() === props.match.params.timesheetId
           )
         };
       } else {
-        console.log("2");
         return {
           tasks: state.tasks.data,
           projects: state.projects,

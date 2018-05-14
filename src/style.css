@@ -604,3 +604,42 @@ header {
       transform: translateY(-1rem);
   }
 }
+
+.serverMsg{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 15px;
+    padding: 30px;
+    background-color: green;
+    color:#fff;
+    position: relative;
+    font-weight: bold;
+}
+.serverErrorMsg{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 15px;
+    padding: 30px;
+    background-color: red;
+    color:#000;
+    position: relative;
+    font-weight: bold;
+}
+.clsCr:hover{
+  cursor: pointer;
+}
+.clsCr{
+   cursor: pointer;
+    display: inline-flex;
+    position: absolute;
+    right: 125px;
+    top: 100px;
+  }
+.clsCrApp
+{  cursor: pointer;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    position: absolute;
+    right: 30px;
+    top: 2px;
+}

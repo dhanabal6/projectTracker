@@ -3,6 +3,7 @@ import InputValidationError from './InputValidationError';
 
 export default field => (
   <div className="inputdetail">
+      <label for={field.name}> {field.label}</label>
     <div className="input">
       <input
         {...field.input}

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Dialog } from 'material-ui';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Dialog } from "material-ui";
 
 class MobTable extends Component {
   constructor(props) {

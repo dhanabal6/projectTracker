@@ -37,7 +37,7 @@ class LoginForm extends Component {
               onSubmit={handleSubmit(this.loginFormSubmit.bind(this))}
             >
               <Field name="emailId" component={forms.Text} label="Email" />
-              <Field name="password" component={forms.Text} label="Password" />
+              <Field name="password" component={forms.Password} label="Password" />
               <Field
                 name="checker"
                 component={forms.Checkbox}

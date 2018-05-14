@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -8,8 +7,8 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn
-} from 'material-ui/Table';
-import Create from 'material-ui/svg-icons/content/create';
+} from "material-ui/Table";
+import Create from "material-ui/svg-icons/content/create";
 
 class TaskTable extends Component {
   render() {

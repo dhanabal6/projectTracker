@@ -9,9 +9,7 @@ export default field => (
         {...field.input}
         className={field.meta.touched && field.meta.error ? "error-field" : ""}
         onChange={event => {
-          console.log(event.target.value);
-          field.input.onChange(event); // <-- Propagate the event
-          // return event.target.value;
+          field.input.onChange(event);
         }}
       >
         {field.children}

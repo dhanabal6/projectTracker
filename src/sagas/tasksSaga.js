@@ -19,7 +19,6 @@ function* fetchTasksSaga(data) {
 function* addTaskSaga(data) {
   try {
     yield put(addTask.request());
-    console.log(data);
     const response = yield call(api.addTask.bind(null, data.payload.projectId, data.payload.data));
     yield put(addTask.success(response));
     yield put(fetchTasks.trigger(data.payload.projectId));
@@ -33,7 +32,6 @@ function* addTaskSaga(data) {
 function* editTaskSaga(data) {
   try {
     yield put(editTask.request());
-    console.dir(data);
     const response = yield call(api.editTask.bind(null, data.payload.projectId, data.payload.id, data.payload.data));
     yield put(editTask.success(response));
     yield put(fetchTasks.trigger(data.payload.projectId));
@@ -47,7 +45,6 @@ function* editTaskSaga(data) {
 function* updateTimelogSaga(data) {
   try {
     yield put(updateTimelog.request());
-    console.dir(data);
     const response = yield call(api.updateTimelog.bind(null, data.payload.taskname, data.payload.logData));
     yield put(updateTimelog.success(response));
   } catch (error) {

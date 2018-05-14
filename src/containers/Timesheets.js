@@ -63,11 +63,13 @@ class Timesheets extends Component {
 
   render() {
     if (this.props.timesheets.loading) {
-      return <div className="Loading bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>;
+      return (
+        <div className="Loading bouncing-loader">
+          <div />
+          <div />
+          <div />
+        </div>
+      );
     }
     const { index, timesheetView } = this.state;
     const { data } = this.props.timesheets;
@@ -114,16 +116,15 @@ class Timesheets extends Component {
 
     return (
       <div className="page">
-      <div className="headingTop">
-        <h3>Timesheets</h3>
-        <Link to="/timesheet/new">
-              <FlatButton
-                label="Create Timesheets"
-                primary={true}
-                onClick={this.handleOpen}
-              >
-              </FlatButton>
-            </Link>
+        <div className="headingTop">
+          <h3>Timesheets</h3>
+          <Link to="/timesheet/new">
+            <FlatButton
+              label="Create Timesheets"
+              primary={true}
+              onClick={this.handleOpen}
+            />
+          </Link>
         </div>
         <div className="section-sides">
           <div>

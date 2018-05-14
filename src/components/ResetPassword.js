@@ -36,7 +36,7 @@ class ResetPasswordForm extends Component {
             >
               <Field
                 name="password"
-                component={forms.Text}
+                component={forms.Password}
                 label="New Password"
               />
               <RaisedButton

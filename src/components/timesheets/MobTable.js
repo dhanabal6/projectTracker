@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Dialog } from 'material-ui';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Dialog } from "material-ui";
 
 class MobTable extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class MobTable extends Component {
   handleClose = () => {
     this.setState({ index: -1 });
   };
-  
+
   filter_array = test_array => {
     var index = -1,
       arr_length = test_array ? test_array.length : 0,
@@ -36,30 +36,30 @@ class MobTable extends Component {
     const { index } = this.state;
     let currentItem = {};
     if (index !== -1) {
-      currentItem = this.props.mobTimetableData[index];
-      this.filter_array(currentItem.timesheet).map(data => (
-        Object.keys(data).map((val,index) => 
-            data[val].map((value,index) => {
-              currentItem =  value;
-            }
-  ))
-))
+      this.filter_array(this.props.mobTimetableData[index].timesheet).map(
+        data =>
+          Object.keys(data).map(val =>
+            data[val].forEach((value, index) => {
+              currentItem = value;
+            })
+          )
+      );
     }
-    console.log(currentItem);
     return (
       <div>
         <p className="name-mob">Project Name</p>
         <ul>
-          {this.props.mobTimetableData.map((item, i) => 
-            this.filter_array(item.timesheet).map(data => (
-                Object.keys(data).map((val,index) => 
-                        data[val].map((value,index) => (
+          {this.props.mobTimetableData.map((item, i) =>
+            this.filter_array(item.timesheet).map(data =>
+              Object.keys(data).map(val =>
+                data[val].map((value, index) => (
                   <li className="data-mob" onClick={() => this.handleOpen(i)}>
                     {value.projectName}
                   </li>
+                ))
               )
-              ))
-            )))}
+            )
+          )}
         </ul>
         <Dialog
           title={

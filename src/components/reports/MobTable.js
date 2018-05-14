@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Dialog } from 'material-ui';
+import React, { Component } from "react";
+import { Dialog } from "material-ui";
 
 class MobTable extends Component {
   constructor(props) {
@@ -25,30 +25,25 @@ class MobTable extends Component {
     let points = 0;
     let comPoints = 0;
     let statusValue = 0;
-    let style ={};
+    let style = {};
     if (index !== -1) {
       currentItem = this.props.mobReportData[index];
-      console.log(currentItem);
-      currentItem.tasks.forEach( data => {
-              points = data.points;
-              pointsCount+=data.points;
-              data.timeLog.forEach( value => {
-                      // comPoints =  value.taskCompletion;
-                      completedPoints+=value.taskCompletion;
-                     })
-            });
-            console.log(points);
-            // console.log(comPoints);
-
-             const status = (completedPoints/pointsCount)*100;
-             if(isNaN(status)){
-                statusValue = 0;
-             } else {
-                statusValue = Math.round(status);
-             }
-           style = {
-              width: statusValue
-             };
+      currentItem.tasks.forEach(data => {
+        points = data.points;
+        pointsCount += data.points;
+        data.timeLog.forEach(value => {
+          completedPoints += value.taskCompletion;
+        });
+      });
+      const status = completedPoints / pointsCount * 100;
+      if (isNaN(status)) {
+        statusValue = 0;
+      } else {
+        statusValue = Math.round(status);
+      }
+      style = {
+        width: statusValue
+      };
     }
     return (
       <div>
@@ -88,10 +83,16 @@ class MobTable extends Component {
               <li>{completedPoints}</li>
               <li>
                 <div className="progress">
-                <div className="progress-bar" role="progressbar" aria-valuenow={statusValue}
-                aria-valuemin="0" aria-valuemax="100" style={style}>
-                  {statusValue}%
-                </div>
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    aria-valuenow={statusValue}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style={style}
+                  >
+                    {statusValue}%
+                  </div>
                 </div>
               </li>
             </ul>

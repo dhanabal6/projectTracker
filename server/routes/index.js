@@ -11,25 +11,6 @@ const People = require("../model/People");
 const Timesheet = require("../model/Timesheet");
 const User = require("../model/User");
 
-const reportData = [
-  {
-    projectName: "sampleProject",
-    taskCount: 20,
-    completeTaskCount: 10,
-    pointsCount: 10,
-    completePointsCount: 5,
-    status: 50
-  },
-  {
-    projectName: "sampleProject1",
-    taskCount: 20,
-    completeTaskCount: 18,
-    pointsCount: 20,
-    completePointsCount: 18,
-    status: 80
-  }
-];
-
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     res.send({ _id: "guest" });
@@ -68,7 +49,6 @@ router.get("/api/register", (req, res) => {
 });
 
 router.post("/api/register", (req, res, next) => {
-  console.log("register...");
   const users = User(req.body);
   const err = users.joiValidate(req.body);
   if (err) throw err;
@@ -85,7 +65,6 @@ router.post("/api/register", (req, res, next) => {
 });
 
 router.post("/api/login", (req, res, next) => {
-  console.log("logging in...");
   const users = User(req.body);
   const err = users.joiValidate(req.body);
   if (err) throw err;
@@ -94,7 +73,7 @@ router.post("/api/login", (req, res, next) => {
       return next(error);
     }
     if (!user) {
-      return res.send("Not a User");
+      return res.send({error: "Incorrect UserName and Password"});
     }
     req.logIn(user, err => {
       if (err) return next(err);
@@ -107,10 +86,11 @@ router.get("/api/logout", (req, res) => {
   req.logout();
   req.session.destroy(err => {
     if (!err) {
-      res
-        .status(200)
-        .clearCookie("connect.sid", { path: "/" })
-        .json({ status: "Success" });
+      res.send({ message: "Logout SuccessFully" });
+      // res
+      //   .status(200)
+      //   .clearCookie("connect.sid", { path: "/" })
+      //   .json({ status: "Success" });
     } else {
       res.send(err);
     }
@@ -124,7 +104,6 @@ router.get("/api/forgotPassword", (req, res) => {
 });
 
 router.post("/api/forgotPassword", (req, res, next) => {
-  console.log("Forgot Password Change...");
   async.waterfall(
     [
       done => {
@@ -136,7 +115,7 @@ router.post("/api/forgotPassword", (req, res, next) => {
       (token, done) => {
         User.findOne({ emailId: req.body.emailId }, (err, user) => {
           if (!user) {
-            return res.send("No account with that email address exists.");
+            return res.send({error:"No account with that email address exists."});
           }
           user.resetPasswordToken = token;
           user.resetPasswordExpires = Date.now() + 3600000;
@@ -174,7 +153,7 @@ router.post("/api/forgotPassword", (req, res, next) => {
             "Project Tracker"
         };
         smtpTransport.sendMail(mailOptions, err => {
-          res.send(user);
+          res.send({message: "Send Link in Your Mail Address Please Check Your Mail"});
           done(err);
         });
       }
@@ -194,7 +173,7 @@ router.get("/api/resetPassword/:token", (req, res) => {
     (err, user) => {
       if (!user) {
         console.log("Password reset token is invalid or has expired.");
-        return res.send("user already exists");
+        return res.send({error:"user already exists"});
       }
       res.send({
         user: req.user
@@ -204,7 +183,6 @@ router.get("/api/resetPassword/:token", (req, res) => {
 });
 
 router.post("/api/resetPassword/:token", (req, res) => {
-  console.log("password Token Change...");
   async.waterfall(
     [
       done => {
@@ -216,7 +194,7 @@ router.post("/api/resetPassword/:token", (req, res) => {
           (err, user) => {
             if (!user) {
               return res.send(
-                "Password reset token is invalid or has expired."
+                {error:"Password reset token is invalid or has expired."}
               );
             }
             user.password = req.body.password;
@@ -253,7 +231,7 @@ router.post("/api/resetPassword/:token", (req, res) => {
         };
         smtpTransport.sendMail(mailOptions, err => {
           done(err);
-          res.send("Success! Your password has been changed.");
+          res.send({message:"Success! Your password has been changed."});
         });
       }
     ],
@@ -377,7 +355,6 @@ router.post("/api/timesheet", isLoggedIn, async (req, res) => {
         }
       });
     } else if (doc) {
-      console.log("doc");
       const docData = doc.timesheet;
       let dataKeys = docData
         .map(o => {
@@ -393,7 +370,6 @@ router.post("/api/timesheet", isLoggedIn, async (req, res) => {
         return val == bodyDate;
       });
       if (docDate != bodyDate) {
-        console.log("not eq date");
         const bodyData = req.body.timesheet;
         Timesheet.update(
           { _id: doc._id },
@@ -410,7 +386,6 @@ router.post("/api/timesheet", isLoggedIn, async (req, res) => {
           }
         });
       } else {
-        console.log("eq date");
         const bodyOrgData = req.body.timesheet[bodyDate];
         let values = docData.find(val => {
           return val[docDate];
@@ -447,50 +422,52 @@ router.get("/api/projectData", isLoggedIn, async (req, res) => {
   );
 });
 
-router.post("/api/timesheet/:timesheetIndex/:timesheetId", isLoggedIn, async (req, res) => {
-  const dataTimesheet = req.body.timesheet;
-  let date;
-  Object.keys(dataTimesheet).map((val, index) => {
-    date = val;
-  });
-  let data;
-  dataTimesheet[date].map(value => {
-    data = value;
-  });
-  const randomStr = Math.random().toString(36).slice(-8);
-  const timesheetIndex = req.params.timesheetIndex;
-  const timesheetId = req.params.timesheetId;
-  await Timesheet.update(
-        {
-          _id: req.user._id,
-          [`timesheet.${date}.timesheetId`]: timesheetId
-        },
-        {
-          $set: {
-            [`timesheet.$.${date}.${timesheetIndex}.timesheetId`]: randomStr,
-            [`timesheet.$.${date}.${timesheetIndex}.projectName`]: data.projectName,
-            [`timesheet.$.${date}.${timesheetIndex}.taskName`]: data.taskName,
-            [`timesheet.$.${date}.${timesheetIndex}.spendTime`]: data.spendTime,
-            [`timesheet.$.${date}.${timesheetIndex}.taskCompletion`]: data.taskCompletion
-          }
-        },
-        (err, data) => {
-          if (err) {
-            res.send(err);
-          } else {
-            console.log('timesheet updated');
-            res.send(data);
-          }
+router.post(
+  "/api/timesheet/:timesheetIndex/:timesheetId",
+  isLoggedIn,
+  async (req, res) => {
+    const dataTimesheet = req.body.timesheet;
+    let date;
+    Object.keys(dataTimesheet).map((val, index) => {
+      date = val;
+    });
+    let data;
+    dataTimesheet[date].map(value => {
+      data = value;
+    });
+    const randomStr = Math.random()
+      .toString(36)
+      .slice(-8);
+    const timesheetIndex = req.params.timesheetIndex;
+    const timesheetId = req.params.timesheetId;
+    await Timesheet.update(
+      {
+        _id: req.user._id,
+        [`timesheet.${date}.timesheetId`]: timesheetId
+      },
+      {
+        $set: {
+          [`timesheet.$.${date}.${timesheetIndex}.timesheetId`]: randomStr,
+          [`timesheet.$.${date}.${timesheetIndex}.projectName`]: data.projectName,
+          [`timesheet.$.${date}.${timesheetIndex}.taskName`]: data.taskName,
+          [`timesheet.$.${date}.${timesheetIndex}.spendTime`]: data.spendTime,
+          [`timesheet.$.${date}.${timesheetIndex}.taskCompletion`]: data.taskCompletion
         }
-      );
-
-});
-
+      },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(data);
+        }
+      }
+    );
+  }
+);
 
 router.get("/api/reports", isLoggedIn, async (req, res) => {
   const allProjects = await Project.getReports(req.user._id);
   res.send(allProjects);
-  // res.send(reportData);
 });
 
 router.get("/api/:projectId", (req, res) => {
@@ -529,7 +506,6 @@ router.post("/api/task/:taskName", isLoggedIn, (req, res) => {
   const taskcompletion = req.body.taskCompletion;
   const date = req.body.date;
   if (req.body.formId == "new") {
-    console.log("update push");
     Task.update(
       { name: taskname },
       {
@@ -552,8 +528,6 @@ router.post("/api/task/:taskName", isLoggedIn, (req, res) => {
       }
     );
   } else {
-    console.log("update set");
-    console.log(date);
     Task.update(
       { name: taskname, "timeLog.date": date },
       {
@@ -592,6 +566,5 @@ router.post("/api/:projectId/:taskId", isLoggedIn, (req, res) => {
     }
   );
 });
-
 
 module.exports = router;

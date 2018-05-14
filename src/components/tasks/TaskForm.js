@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+import { withRouter } from "react-router-dom";
 
-import { RaisedButton, Dialog } from 'material-ui';
-import forms from '../forms';
-import { validate } from '../../logic/task';
-import { addTask, editTask, fetchUser } from '../../routines';
+import { RaisedButton, Dialog } from "material-ui";
+import forms from "../forms";
+import { validate } from "../../logic/task";
+import { addTask, editTask, fetchUser } from "../../routines";
 
 class TaskForm extends Component {
   componentDidMount() {
@@ -54,11 +54,7 @@ class TaskForm extends Component {
       >
         <form onSubmit={handleSubmit(this.taskFormSubmit.bind(this))}>
           <div className="mainform">
-            <Field
-              name="name"
-              component={forms.Text}
-              label="Task Name"
-            />
+            <Field name="name" component={forms.Text} label="Task Name" />
             <Field
               name="description"
               component={forms.TextArea}
@@ -66,11 +62,7 @@ class TaskForm extends Component {
               multiLine={true}
               rows={2}
             />
-            <Field
-              name="points"
-              component={forms.Text}
-              label="Tasks points"
-            />
+            <Field name="points" component={forms.Text} label="Tasks points" />
             <Field name="status" component={forms.Select} label="Tasks Status">
               <option />
               <option>BackLog</option>
@@ -80,15 +72,13 @@ class TaskForm extends Component {
               <option>Approved</option>
               <option>ReOpen</option>
             </Field>
-           <Field
+            <Field
               name="assignedTo"
               component={forms.Select}
               label="AssignedTo User"
             >
               <option />
-              {this.props.userData.map(item =>
-                 <option>{item.emailId}</option>
-              )}
+              {this.props.userData.map(item => <option>{item.emailId}</option>)}
             </Field>
           </div>
           <RaisedButton
@@ -107,9 +97,8 @@ class TaskForm extends Component {
             onClick={reset}
           />
           {this.props.isUpdating && (
-              <span className="valid-green"> Updating... </span>
-            )
-          }
+            <span className="valid-green"> Updating... </span>
+          )}
         </form>
       </Dialog>
     );

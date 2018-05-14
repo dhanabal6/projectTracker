@@ -1,35 +1,40 @@
-import { fetchProjects, addProject, editProject, fetchProjectData } from '../routines';
+import {
+  fetchProjects,
+  addProject,
+  editProject,
+  fetchProjectData
+} from "../routines";
 
 const initialState = {
   data: [],
   loading: false,
   updating: false,
   popup: false,
-  error: null,
+  error: null
 };
- 
+
 export default function projectsReducer(state = initialState, action) {
   console.log("action.type reducer:" + action.type);
   switch (action.type) {
     case fetchProjects.TRIGGER:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     case fetchProjects.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload
       };
     case fetchProjects.FAILURE:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       };
     case fetchProjects.FULFILL:
       return {
         ...state,
-        loading: false,
+        loading: false
       };
 
     case fetchProjectData.TRIGGER:
@@ -39,12 +44,12 @@ export default function projectsReducer(state = initialState, action) {
     case fetchProjectData.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload
       };
     case fetchProjectData.FAILURE:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       };
     case fetchProjectData.FULFILL:
       return {
@@ -56,27 +61,27 @@ export default function projectsReducer(state = initialState, action) {
       return {
         ...state,
         updating: true,
-        popup: false,
-     };
+        popup: false
+      };
     case addProject.FAILURE:
     case editProject.FAILURE:
       return {
         ...state,
-         updating:false,
+        updating: false
       };
     case addProject.SUCCESS:
     case editProject.SUCCESS:
       return {
         ...state,
         updating: false,
-        popup: true,  
-    };
+        popup: true
+      };
     case addProject.FULFILL:
     case editProject.FULFILL:
-      return {  
+      return {
         ...state,
-        popup: false,
-    };
+        popup: false
+      };
     default:
       return state;
   }

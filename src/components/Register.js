@@ -32,7 +32,7 @@ class RegisterForm extends Component {
             >
               <Field name="name" component={forms.Text} label="Name" />
               <Field name="emailId" component={forms.Text} label="Email" />
-              <Field name="password" component={forms.Text} label="Password" />
+              <Field name="password" component={forms.Password} label="Password" />
               <RaisedButton
                 type="submit"
                 label="Register"

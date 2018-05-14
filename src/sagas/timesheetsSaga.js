@@ -1,19 +1,12 @@
-import {
-  addTimesheet,
-  editTimesheet,
-  fetchTimesheets
-} from "../routines";
+import { addTimesheet, editTimesheet, fetchTimesheets } from "../routines";
 import { takeEvery, delay } from "redux-saga";
 import { call, put, fork } from "redux-saga/effects";
 import api from "../api";
 
-
 function* fetchTimesheetsSaga(data) {
   try {
     yield put(fetchTimesheets.request());
-    const response = yield call(
-      api.fetchTimesheets.bind(null, data.payload)
-    );
+    const response = yield call(api.fetchTimesheets.bind(null, data.payload));
     yield call(delay, 200);
     yield put(fetchTimesheets.success(response));
   } catch (error) {
@@ -40,10 +33,13 @@ function* addTimesheetSaga(data) {
 function* editTimesheetSaga(data) {
   try {
     yield put(editTimesheet.request());
-        console.dir(data);
-
     const response = yield call(
-      api.editTimesheet.bind(null, data.payload.id,data.payload.timesheetId, data.payload.data)
+      api.editTimesheet.bind(
+        null,
+        data.payload.id,
+        data.payload.timesheetId,
+        data.payload.data
+      )
     );
     yield put(editTimesheet.success(response));
     yield put(fetchTimesheets.trigger());

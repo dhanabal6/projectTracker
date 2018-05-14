@@ -1,8 +1,8 @@
 import { register, login, userInfo, forgotPassword, resetPassword, logout, fetchUser } from '../routines';
-import { takeEvery } from 'redux-saga';
+import { takeEvery, delay } from 'redux-saga';
 import { push } from 'react-router-redux';
-
 import { call, put, fork } from 'redux-saga/effects';
+
 import api from '../api';
 
 function* registerSaga(data) {
@@ -22,6 +22,9 @@ function* loginSaga(data) {
     yield put(login.request());
     const response = yield call(api.login.bind(null, data));
     yield put(login.success(response));
+    yield call(delay, 2000);
+    yield put(userInfo.trigger());
+    yield put(push('/'));
   } catch (error) {
     console.dir(error);
     yield put(login.failure(error.message));
@@ -35,20 +38,24 @@ function* forgotPasswordSaga(data) {
     yield put(forgotPassword.request());
     const response = yield call(api.forgotPassword.bind(null, data));
     yield put(forgotPassword.success(response));
+    yield call(delay, 2000);
+    yield put(userInfo.trigger());
+    yield put(push('/'));
   } catch (error) {
     yield put(forgotPassword.failure(error.message));
   } finally {
-    yield put(push('/'));
     yield put(forgotPassword.fulfill());
   }
 }
 
 function* resetPasswordSaga(data) {
   try {
-    console.log("resetSaga");
     yield put(resetPassword.request());
     const response = yield call(api.resetPassword.bind(null, data.payload.token, data.payload.data));
     yield put(resetPassword.success(response));
+    yield call(delay, 2000);
+    yield put(userInfo.trigger());
+    yield put(push('/'));
   } catch (error) {
     yield put(resetPassword.failure(error.message));
   } finally {
@@ -86,10 +93,12 @@ function* logoutSaga() {
     yield put(logout.request());
     const response = yield call(api.logout);
     yield put(logout.success(response));
+    yield call(delay, 2000);
+    yield put(userInfo.trigger());
+    yield put(push('/'));
   } catch (error) {
     yield put(logout.failure(error.message));
   } finally {
-    yield put(push('/'));
     yield put(logout.fulfill());
   }
 }
